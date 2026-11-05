@@ -24,6 +24,7 @@ const (
 type Time struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Timestamp     int32                  `protobuf:"varint,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	NodeId        int32                  `protobuf:"varint,2,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -65,13 +66,21 @@ func (x *Time) GetTimestamp() int32 {
 	return 0
 }
 
+func (x *Time) GetNodeId() int32 {
+	if x != nil {
+		return x.NodeId
+	}
+	return 0
+}
+
 var File_proto_proto protoreflect.FileDescriptor
 
 const file_proto_proto_rawDesc = "" +
 	"\n" +
-	"\vproto.proto\"$\n" +
+	"\vproto.proto\"=\n" +
 	"\x04Time\x12\x1c\n" +
-	"\ttimestamp\x18\x01 \x01(\x05R\ttimestamp2>\n" +
+	"\ttimestamp\x18\x01 \x01(\x05R\ttimestamp\x12\x17\n" +
+	"\anode_id\x18\x02 \x01(\x05R\x06nodeId2>\n" +
 	"\tBroadcast\x12\x17\n" +
 	"\arequest\x12\x05.Time\x1a\x05.Time\x12\x18\n" +
 	"\bresponse\x12\x05.Time\x1a\x05.TimeB\x19Z\x17project-root/grpc/protob\x06proto3"

@@ -3,6 +3,7 @@ option go_package = "project-root/grpc/proto";
 
 message Time{
     int32 timestamp = 1;
+    int32 node_id = 2;
 }
 
 service Broadcast {
