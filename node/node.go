@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"os"
@@ -11,25 +12,42 @@ import (
 	"google.golang.org/grpc"
 )
 
+type Pool struct {
+	pb.UnimplementedBroadcastServer
+	Connection []*grpc.ClientConn
+}
+
+func Request(ctx context.Context, time *pb.Time) {
+
+}
+
+func Response(time pb.Time) {
+
+}
+
 func main() {
 	id, _ := strconv.Atoi(os.Args[1])
 	nodePorts := []string{"1001", "1002", "1003"}
 	myport := nodePorts[id]
 
 	myServer := grpc.NewServer()
-	pb.RegisterBroadcastServer(myServer, pb.UnimplementedBroadcastServer{})
 
-	connections := make([]*grpc.ClientConn, 2)
+	var conn []*grpc.ClientConn
+	pool := &Pool{
+		Connection: conn,
+	}
+	pb.RegisterBroadcastServer(myServer, pool)
+
 	for i, port := range nodePorts {
 		if i == id {
 			continue
 		}
 		client, _ := grpc.NewClient(port)
-		connections := append(connections, client)
+		pool.Connection = append(pool.Connection, client)
 		if i > id {
-			defer connections[i-1].Close()
+			defer pool.Connection[i-1].Close()
 		} else {
-			defer connections[i].Close()
+			defer pool.Connection[i].Close()
 		}
 	}
 
