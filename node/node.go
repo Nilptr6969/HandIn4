@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 
+	pb "project-root/grpc"
+
 	"google.golang.org/grpc"
 )
 
@@ -14,9 +16,8 @@ func main() {
 	nodePorts := []string{"1001", "1002", "1003"}
 	myport := nodePorts[id]
 
-	localAddress, _ := net.ResolveUDPAddr("udp", "localhost"+myport)
-	serverConnection, _ := net.ListenUDP("udp", localAddress)
-	defer serverConnection.Close()
+	myServer := grpc.NewServer()
+	pb.RegisterBroadcastServer(myServer, pb.UnimplementedBroadcastServer{})
 
 	connections := make([]*grpc.ClientConn, 2)
 	for i, port := range nodePorts {
@@ -32,7 +33,8 @@ func main() {
 		}
 	}
 
-	fmt.Scan()
+	listener, _ := net.Listen("tcp", "localhost:"+myport)
+	myServer.Serve(listener)
 }
 
 func criticalSection(id int) {
