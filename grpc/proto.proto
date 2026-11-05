@@ -1,0 +1,11 @@
+syntax = "proto3";
+option go_package = "project-root/grpc/proto";
+
+message Time{
+    int32 timestamp = 1;
+}
+
+service Broadcast {
+    rpc request (Time) returns (Time);
+    rpc response (Time) returns (Time);
+}
