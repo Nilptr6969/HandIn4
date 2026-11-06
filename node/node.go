@@ -4,11 +4,13 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"log"
 	"net"
 	"os"
 	pb "project-root/grpc"
 	"strconv"
 	"sync"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -103,10 +105,22 @@ func (p *Pool) runCriticalSection() {
 		return
 	}
 	defer p.release()
+	log.Println("Node", p.nodeID, "is entering critical section")
 	criticalSection(int(p.nodeID))
+	log.Println("Node", p.nodeID, "is out of critical section")
 }
 
 func main() {
+	// Logging taken from https://last9.io/blog/write-logs-to-file/
+	logFile, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("Failed to open log file: %v", err)
+	}
+	defer logFile.Close()
+
+	log.SetOutput(logFile)
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
 	id, _ := strconv.Atoi(os.Args[1])
 
 	nodePorts := []string{"50051", "50052", "50053"}
@@ -137,5 +151,8 @@ func main() {
 }
 
 func criticalSection(id int) {
+	log.Println("Node", id, "is in critical section")
 	fmt.Println(id, "has accessed the critical section.")
+	time.Sleep(10 * time.Second)
+	log.Println("Node", id, "is done in critical section")
 }
