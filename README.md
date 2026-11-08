@@ -1,6 +1,6 @@
 # Running the program
 
-To run the program, you must start up 3 different nodes, using the command `"go run .\node\ [id]"` or `"go run .\node\node.go [id]"` with the id's 0, 1 and 2. Once the 3 nodes are up and running, the program is ready to be used. 
+To run the program, you must start up 3 different nodes, using the command `go run .\node\ [id]` or `go run .\node\node.go [id]` with the id's 0, 1 and 2. Once the 3 nodes are up and running, the program is ready to be used. 
 
 # Using the program
 
