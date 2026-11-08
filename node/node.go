@@ -94,10 +94,11 @@ func (p *Pool) release() { //resets the node
 	p.mu.Lock()
 	p.requesting = false
 	p.logicalTime++
+	deferred := p.deferred
 	p.deferred = make(map[int32]chan struct{})
 	p.mu.Unlock()
 
-	for _, granted := range p.deferred {
+	for _, granted := range deferred {
 		close(granted)
 	}
 }

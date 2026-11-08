@@ -1,0 +1,46 @@
+2026/11/08 18:17:09 node.go:112: Node 0 is entering critical section
+2026/11/08 18:17:09 node.go:158: Node 0 is in critical section
+2026/11/08 18:17:14 node.go:161: Node 0 is done in critical section
+2026/11/08 18:17:14 node.go:114: Node 0 is out of critical section
+2026/11/08 18:17:14 node.go:112: Node 1 is entering critical section
+2026/11/08 18:17:14 node.go:158: Node 1 is in critical section
+2026/11/08 18:17:19 node.go:161: Node 1 is done in critical section
+2026/11/08 18:17:19 node.go:114: Node 1 is out of critical section
+2026/11/08 18:17:19 node.go:112: Node 2 is entering critical section
+2026/11/08 18:17:19 node.go:158: Node 2 is in critical section
+2026/11/08 18:17:24 node.go:161: Node 2 is done in critical section
+2026/11/08 18:17:24 node.go:114: Node 2 is out of critical section
+2026/11/08 18:17:24 node.go:112: Node 0 is entering critical section
+2026/11/08 18:17:24 node.go:158: Node 0 is in critical section
+2026/11/08 18:17:29 node.go:161: Node 0 is done in critical section
+2026/11/08 18:17:29 node.go:114: Node 0 is out of critical section
+2026/11/08 18:17:29 node.go:112: Node 1 is entering critical section
+2026/11/08 18:17:29 node.go:158: Node 1 is in critical section
+2026/11/08 18:17:34 node.go:161: Node 1 is done in critical section
+2026/11/08 18:17:34 node.go:114: Node 1 is out of critical section
+2026/11/08 18:17:34 node.go:112: Node 2 is entering critical section
+2026/11/08 18:17:34 node.go:158: Node 2 is in critical section
+2026/11/08 18:17:39 node.go:161: Node 2 is done in critical section
+2026/11/08 18:17:39 node.go:114: Node 2 is out of critical section
+2026/11/08 18:17:52 node.go:112: Node 0 is entering critical section
+2026/11/08 18:17:52 node.go:158: Node 0 is in critical section
+2026/11/08 18:17:57 node.go:161: Node 0 is done in critical section
+2026/11/08 18:17:57 node.go:114: Node 0 is out of critical section
+2026/11/08 18:17:57 node.go:112: Node 1 is entering critical section
+2026/11/08 18:17:57 node.go:158: Node 1 is in critical section
+2026/11/08 18:18:02 node.go:161: Node 1 is done in critical section
+2026/11/08 18:18:02 node.go:114: Node 1 is out of critical section
+2026/11/08 18:18:02 node.go:112: Node 2 is entering critical section
+2026/11/08 18:18:02 node.go:158: Node 2 is in critical section
+2026/11/08 18:18:07 node.go:161: Node 2 is done in critical section
+2026/11/08 18:18:07 node.go:114: Node 2 is out of critical section
+2026/11/08 18:18:07 node.go:112: Node 0 is entering critical section
+2026/11/08 18:18:07 node.go:158: Node 0 is in critical section
+2026/11/08 18:18:12 node.go:161: Node 0 is done in critical section
+2026/11/08 18:18:12 node.go:114: Node 0 is out of critical section
+2026/11/08 18:18:12 node.go:112: Node 1 is entering critical section
+2026/11/08 18:18:12 node.go:158: Node 1 is in critical section
+2026/11/08 18:18:17 node.go:161: Node 1 is done in critical section
+2026/11/08 18:18:17 node.go:114: Node 1 is out of critical section
+2026/11/08 18:18:17 node.go:112: Node 2 is entering critical section
+2026/11/08 18:18:17 node.go:158: Node 2 is in critical section
