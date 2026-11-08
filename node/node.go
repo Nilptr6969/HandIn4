@@ -43,7 +43,7 @@ func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) 
 		p.deferred[request.NodeId] = granted
 		p.mu.Unlock()
 
-		<-granted
+		<-granted // this channel is closed when this node uses release after entering the critical section
 
 		p.mu.Lock()
 	}
@@ -55,7 +55,7 @@ func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) 
 }
 
 // this node requesting, returns true when all other nodes have responded. only returns false if an error occurs
-func (p *Pool) requestPermission() bool {
+func (p *Pool) requestPermission() {
 	p.mu.Lock()
 	p.logicalTime++
 	p.requesting = true
@@ -68,13 +68,9 @@ func (p *Pool) requestPermission() bool {
 		go p.sendRequest(connection, request, replies)
 	}
 
-	granted := true // whether or not the critical section can be accessed
 	for range len(p.connections) {
-		if !<-replies { // if any reply fails then granted will be false and the critical section cannot be entered
-			granted = false
-		}
+		<-replies // makes shure that all replies must be recieved before the node continues to the critical section
 	}
-	return granted
 }
 
 // makes a request for each of the other nodes. It is asyncronous so that we can have a channel waiting for the response of each node
@@ -104,10 +100,7 @@ func (p *Pool) release() { //resets the node
 }
 
 func (p *Pool) runCriticalSection() {
-	if !p.requestPermission() {
-		p.release()
-		return
-	}
+	p.requestPermission() 
 	defer p.release()
 	log.Println("Node", p.nodeID, "is entering critical section")
 	criticalSection(int(p.nodeID))
