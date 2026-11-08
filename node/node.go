@@ -55,7 +55,7 @@ func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) 
 	return reply, nil
 }
 
-// this node requesting, returns true when all other nodes have responded. only returns false if an error occurs
+// this node requesting, finishes when all other nodes have responded.
 func (p *Pool) requestPermission() {
 	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is requesting permission to enter the critical section")
 	p.mu.Lock()
