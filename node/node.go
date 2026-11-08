@@ -125,7 +125,7 @@ func main() {
 	log.SetOutput(logFile)
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	id, _ := strconv.Atoi(os.Args[1])
+	id, _ := strconv.Atoi(os.Args[0])
 
 	nodePorts := []string{"50051", "50052", "50053"}
 	pool := &Pool{nodeID: int32(id), deferred: make(map[int32]chan struct{}), connections: make(map[int32]pb.BroadcastClient)}
