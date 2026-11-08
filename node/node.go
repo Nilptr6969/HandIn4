@@ -65,21 +65,7 @@ func (p *Pool) requestPermission() bool {
 
 	replies := make(chan bool, len(p.connections))
 	for _, connection := range p.connections {
-		go func(connection pb.BroadcastClient) { // makes a request for each of the other nodes. It is asyncronous so that we can have a channel waiting for the response of each node
-			reply, err := connection.Request(context.Background(), request, grpc.WaitForReady(true))
-			if err != nil || reply == nil { // in case of error or no reply
-				replies <- false
-				return
-			}
-			p.mu.Lock()
-
-			if reply.Timestamp > p.logicalTime {
-				p.logicalTime = reply.Timestamp
-			}
-			p.logicalTime++
-			p.mu.Unlock()
-			replies <- true
-		}(connection)
+		go p.sendRequest(connection, request, replies)
 	}
 
 	granted := true // whether or not the critical section can be accessed
@@ -89,6 +75,19 @@ func (p *Pool) requestPermission() bool {
 		}
 	}
 	return granted
+}
+
+// makes a request for each of the other nodes. It is asyncronous so that we can have a channel waiting for the response of each node
+func (p *Pool) sendRequest(connection pb.BroadcastClient, request *pb.Time, replies chan bool) {
+	reply, _ := connection.Request(context.Background(), request, grpc.WaitForReady(true))
+
+	p.mu.Lock()
+	if reply.Timestamp > p.logicalTime {
+		p.logicalTime = reply.Timestamp
+	}
+	p.logicalTime++
+	p.mu.Unlock()
+	replies <- true
 }
 
 func (p *Pool) release() { //resets the node
@@ -157,6 +156,6 @@ func main() {
 func criticalSection(id int) {
 	log.Println("Node", id, "is in critical section")
 	fmt.Println(id, "has accessed the critical section.")
-	time.Sleep(10 * time.Second)
+	time.Sleep(5 * time.Second)
 	log.Println("Node", id, "is done in critical section")
 }
