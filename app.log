@@ -1,46 +1,56 @@
-2026/11/08 18:17:09 node.go:112: Node 0 is entering critical section
-2026/11/08 18:17:09 node.go:158: Node 0 is in critical section
-2026/11/08 18:17:14 node.go:161: Node 0 is done in critical section
-2026/11/08 18:17:14 node.go:114: Node 0 is out of critical section
-2026/11/08 18:17:14 node.go:112: Node 1 is entering critical section
-2026/11/08 18:17:14 node.go:158: Node 1 is in critical section
-2026/11/08 18:17:19 node.go:161: Node 1 is done in critical section
-2026/11/08 18:17:19 node.go:114: Node 1 is out of critical section
-2026/11/08 18:17:19 node.go:112: Node 2 is entering critical section
-2026/11/08 18:17:19 node.go:158: Node 2 is in critical section
-2026/11/08 18:17:24 node.go:161: Node 2 is done in critical section
-2026/11/08 18:17:24 node.go:114: Node 2 is out of critical section
-2026/11/08 18:17:24 node.go:112: Node 0 is entering critical section
-2026/11/08 18:17:24 node.go:158: Node 0 is in critical section
-2026/11/08 18:17:29 node.go:161: Node 0 is done in critical section
-2026/11/08 18:17:29 node.go:114: Node 0 is out of critical section
-2026/11/08 18:17:29 node.go:112: Node 1 is entering critical section
-2026/11/08 18:17:29 node.go:158: Node 1 is in critical section
-2026/11/08 18:17:34 node.go:161: Node 1 is done in critical section
-2026/11/08 18:17:34 node.go:114: Node 1 is out of critical section
-2026/11/08 18:17:34 node.go:112: Node 2 is entering critical section
-2026/11/08 18:17:34 node.go:158: Node 2 is in critical section
-2026/11/08 18:17:39 node.go:161: Node 2 is done in critical section
-2026/11/08 18:17:39 node.go:114: Node 2 is out of critical section
-2026/11/08 18:17:52 node.go:112: Node 0 is entering critical section
-2026/11/08 18:17:52 node.go:158: Node 0 is in critical section
-2026/11/08 18:17:57 node.go:161: Node 0 is done in critical section
-2026/11/08 18:17:57 node.go:114: Node 0 is out of critical section
-2026/11/08 18:17:57 node.go:112: Node 1 is entering critical section
-2026/11/08 18:17:57 node.go:158: Node 1 is in critical section
-2026/11/08 18:18:02 node.go:161: Node 1 is done in critical section
-2026/11/08 18:18:02 node.go:114: Node 1 is out of critical section
-2026/11/08 18:18:02 node.go:112: Node 2 is entering critical section
-2026/11/08 18:18:02 node.go:158: Node 2 is in critical section
-2026/11/08 18:18:07 node.go:161: Node 2 is done in critical section
-2026/11/08 18:18:07 node.go:114: Node 2 is out of critical section
-2026/11/08 18:18:07 node.go:112: Node 0 is entering critical section
-2026/11/08 18:18:07 node.go:158: Node 0 is in critical section
-2026/11/08 18:18:12 node.go:161: Node 0 is done in critical section
-2026/11/08 18:18:12 node.go:114: Node 0 is out of critical section
-2026/11/08 18:18:12 node.go:112: Node 1 is entering critical section
-2026/11/08 18:18:12 node.go:158: Node 1 is in critical section
-2026/11/08 18:18:17 node.go:161: Node 1 is done in critical section
-2026/11/08 18:18:17 node.go:114: Node 1 is out of critical section
-2026/11/08 18:18:17 node.go:112: Node 2 is entering critical section
-2026/11/08 18:18:17 node.go:158: Node 2 is in critical section
+2026/11/08 20:14:52 node.go:60: Timestamp: 0 Node 0 is requesting permission to enter the critical section
+2026/11/08 20:14:52 node.go:82: Timestamp: 1 Node 0 is sending a request
+2026/11/08 20:14:52 node.go:82: Timestamp: 1 Node 0 is sending a request
+2026/11/08 20:14:52 node.go:33: Timestamp: 0 Node 2 has recieved a request to enter the critical section
+2026/11/08 20:14:52 node.go:33: Timestamp: 0 Node 1 has recieved a request to enter the critical section
+2026/11/08 20:14:52 node.go:75: Timestamp: 5 Node 0 has recieved a reply from another node
+2026/11/08 20:14:52 node.go:75: Timestamp: 5 Node 0 has recieved a reply from another node
+2026/11/08 20:14:52 node.go:77: Timestamp: 5 Node 0 has been granted permission to enter the critical section
+2026/11/08 20:14:52 node.go:112: Timestamp: 5 Node 0 is entering critical section
+2026/11/08 20:14:52 node.go:158: Timestamp: 5 Node 0 is in critical section
+2026/11/08 20:14:57 node.go:60: Timestamp: 3 Node 1 is requesting permission to enter the critical section
+2026/11/08 20:14:57 node.go:82: Timestamp: 4 Node 1 is sending a request
+2026/11/08 20:14:57 node.go:82: Timestamp: 4 Node 1 is sending a request
+2026/11/08 20:14:57 node.go:33: Timestamp: 3 Node 2 has recieved a request to enter the critical section
+2026/11/08 20:14:57 node.go:75: Timestamp: 7 Node 1 has recieved a reply from another node
+2026/11/08 20:14:57 node.go:33: Timestamp: 5 Node 0 has recieved a request to enter the critical section
+2026/11/08 20:14:57 node.go:161: Timestamp: 6 Node 0 is done in critical section
+2026/11/08 20:14:57 node.go:114: Timestamp: 6 Node 0 is out of critical section
+2026/11/08 20:14:57 node.go:95: Timestamp: 6 Node 0 is releasing access to the critical section
+2026/11/08 20:14:57 node.go:106: Timestamp: 7 Node 0 has replied to all nodes requesting access to the critical section
+2026/11/08 20:14:57 node.go:75: Timestamp: 9 Node 1 has recieved a reply from another node
+2026/11/08 20:14:57 node.go:77: Timestamp: 9 Node 1 has been granted permission to enter the critical section
+2026/11/08 20:14:57 node.go:112: Timestamp: 9 Node 1 is entering critical section
+2026/11/08 20:14:57 node.go:158: Timestamp: 9 Node 1 is in critical section
+2026/11/08 20:14:59 node.go:60: Timestamp: 6 Node 2 is requesting permission to enter the critical section
+2026/11/08 20:14:59 node.go:82: Timestamp: 7 Node 2 is sending a request
+2026/11/08 20:14:59 node.go:82: Timestamp: 7 Node 2 is sending a request
+2026/11/08 20:14:59 node.go:33: Timestamp: 9 Node 1 has recieved a request to enter the critical section
+2026/11/08 20:14:59 node.go:33: Timestamp: 8 Node 0 has recieved a request to enter the critical section
+2026/11/08 20:14:59 node.go:75: Timestamp: 11 Node 2 has recieved a reply from another node
+2026/11/08 20:15:00 node.go:60: Timestamp: 10 Node 0 is requesting permission to enter the critical section
+2026/11/08 20:15:00 node.go:82: Timestamp: 11 Node 0 is sending a request
+2026/11/08 20:15:00 node.go:82: Timestamp: 11 Node 0 is sending a request
+2026/11/08 20:15:00 node.go:33: Timestamp: 11 Node 2 has recieved a request to enter the critical section
+2026/11/08 20:15:00 node.go:33: Timestamp: 10 Node 1 has recieved a request to enter the critical section
+2026/11/08 20:15:02 node.go:161: Timestamp: 12 Node 1 is done in critical section
+2026/11/08 20:15:02 node.go:114: Timestamp: 12 Node 1 is out of critical section
+2026/11/08 20:15:02 node.go:95: Timestamp: 12 Node 1 is releasing access to the critical section
+2026/11/08 20:15:02 node.go:106: Timestamp: 13 Node 1 has replied to all nodes requesting access to the critical section
+2026/11/08 20:15:02 node.go:75: Timestamp: 15 Node 2 has recieved a reply from another node
+2026/11/08 20:15:02 node.go:75: Timestamp: 16 Node 0 has recieved a reply from another node
+2026/11/08 20:15:02 node.go:77: Timestamp: 15 Node 2 has been granted permission to enter the critical section
+2026/11/08 20:15:03 node.go:112: Timestamp: 15 Node 2 is entering critical section
+2026/11/08 20:15:03 node.go:158: Timestamp: 15 Node 2 is in critical section
+2026/11/08 20:15:08 node.go:161: Timestamp: 15 Node 2 is done in critical section
+2026/11/08 20:15:08 node.go:114: Timestamp: 15 Node 2 is out of critical section
+2026/11/08 20:15:08 node.go:95: Timestamp: 15 Node 2 is releasing access to the critical section
+2026/11/08 20:15:08 node.go:106: Timestamp: 16 Node 2 has replied to all nodes requesting access to the critical section
+2026/11/08 20:15:08 node.go:75: Timestamp: 18 Node 0 has recieved a reply from another node
+2026/11/08 20:15:08 node.go:77: Timestamp: 18 Node 0 has been granted permission to enter the critical section
+2026/11/08 20:15:08 node.go:112: Timestamp: 18 Node 0 is entering critical section
+2026/11/08 20:15:08 node.go:158: Timestamp: 18 Node 0 is in critical section
+2026/11/08 20:15:13 node.go:161: Timestamp: 18 Node 0 is done in critical section
+2026/11/08 20:15:13 node.go:114: Timestamp: 18 Node 0 is out of critical section
+2026/11/08 20:15:13 node.go:95: Timestamp: 18 Node 0 is releasing access to the critical section
+2026/11/08 20:15:13 node.go:106: Timestamp: 19 Node 0 has replied to all nodes requesting access to the critical section

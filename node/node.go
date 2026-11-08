@@ -30,6 +30,7 @@ type Pool struct {
 
 // when a node recieves a request
 func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) {
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "has recieved a request to enter the critical section")
 	p.mu.Lock()
 	if request.Timestamp > p.logicalTime {
 		p.logicalTime = request.Timestamp
@@ -56,6 +57,7 @@ func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) 
 
 // this node requesting, returns true when all other nodes have responded. only returns false if an error occurs
 func (p *Pool) requestPermission() {
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is requesting permission to enter the critical section")
 	p.mu.Lock()
 	p.logicalTime++
 	p.requesting = true
@@ -70,11 +72,14 @@ func (p *Pool) requestPermission() {
 
 	for range len(p.connections) {
 		<-replies // makes shure that all replies must be recieved before the node continues to the critical section
+		log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "has recieved a reply from another node")
 	}
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "has been granted permission to enter the critical section")
 }
 
 // makes a request for each of the other nodes. It is asyncronous so that we can have a channel waiting for the response of each node
 func (p *Pool) sendRequest(connection pb.BroadcastClient, request *pb.Time, replies chan bool) {
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is sending a request")
 	reply, _ := connection.Request(context.Background(), request, grpc.WaitForReady(true))
 
 	p.mu.Lock()
@@ -87,6 +92,7 @@ func (p *Pool) sendRequest(connection pb.BroadcastClient, request *pb.Time, repl
 }
 
 func (p *Pool) release() { //resets the node
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is releasing access to the critical section")
 	p.mu.Lock()
 	p.requesting = false
 	p.logicalTime++
@@ -97,14 +103,15 @@ func (p *Pool) release() { //resets the node
 	for _, granted := range deferred {
 		close(granted)
 	}
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "has replied to all nodes requesting access to the critical section")
 }
 
 func (p *Pool) runCriticalSection() {
-	p.requestPermission() 
+	p.requestPermission()
 	defer p.release()
-	log.Println("Node", p.nodeID, "is entering critical section")
-	criticalSection(int(p.nodeID))
-	log.Println("Node", p.nodeID, "is out of critical section")
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is entering critical section")
+	p.enterCriticalSection()
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is out of critical section")
 }
 
 func main() {
@@ -147,9 +154,9 @@ func main() {
 	}
 }
 
-func criticalSection(id int) {
-	log.Println("Node", id, "is in critical section")
-	fmt.Println(id, "has accessed the critical section.")
+func (p *Pool) enterCriticalSection() {
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is in critical section")
+	fmt.Println(p.nodeID, "has accessed the critical section.")
 	time.Sleep(5 * time.Second)
-	log.Println("Node", id, "is done in critical section")
+	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is done in critical section")
 }
