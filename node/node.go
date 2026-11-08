@@ -22,6 +22,7 @@ type Pool struct {
 	logicalTime int32                   // the node's current time
 	requestTime int32                   // the time for the request sent by this node
 	requesting  bool                    // wether or not the node is requesting to enter the critical section
+	held        bool                    // wether or not the node currently has access to the critical section
 	deferred    map[int32]chan struct{} // the other nodes that are requesting but are being postponed while this node has priority
 	// the channel is to signal to other nodes when their request can continue
 	connections map[int32]pb.BroadcastClient // the other nodes
@@ -37,9 +38,9 @@ func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) 
 	}
 	p.logicalTime++
 
-	//if this node is also requesting
-	//if so, then is it earlier than the requesting one, else if it's the same time who's id is smaller
-	if p.requesting && (p.requestTime < request.Timestamp || (p.requestTime == request.Timestamp && p.nodeID < request.NodeId)) {
+	//if this node currently has access to the critical section, or is requesting access and has priority, defer the request
+	//priority is the earlier request, else if it's the same time who's id is smaller
+	if p.held || (p.requesting && (p.requestTime < request.Timestamp || (p.requestTime == request.Timestamp && p.nodeID < request.NodeId))) {
 		granted := make(chan struct{})
 		p.deferred[request.NodeId] = granted
 		p.mu.Unlock()
@@ -74,6 +75,7 @@ func (p *Pool) requestPermission() {
 		<-replies // makes shure that all replies must be recieved before the node continues to the critical section
 		log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "has recieved a reply from another node")
 	}
+	p.held = true
 	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "has been granted permission to enter the critical section")
 }
 
@@ -95,6 +97,7 @@ func (p *Pool) release() { //resets the node
 	log.Println("Timestamp:", p.logicalTime, "Node", p.nodeID, "is releasing access to the critical section")
 	p.mu.Lock()
 	p.requesting = false
+	p.held = false
 	p.logicalTime++
 	deferred := p.deferred
 	p.deferred = make(map[int32]chan struct{})
@@ -128,7 +131,7 @@ func main() {
 	id, _ := strconv.Atoi(os.Args[1])
 
 	nodePorts := []string{"50051", "50052", "50053"}
-	pool := &Pool{nodeID: int32(id), deferred: make(map[int32]chan struct{}), connections: make(map[int32]pb.BroadcastClient)}
+	pool := &Pool{nodeID: int32(id), logicalTime: 0, requesting: false, held: false, deferred: make(map[int32]chan struct{}), connections: make(map[int32]pb.BroadcastClient)}
 	server := grpc.NewServer()
 	pb.RegisterBroadcastServer(server, pool)
 
