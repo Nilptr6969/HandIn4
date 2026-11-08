@@ -18,15 +18,17 @@ import (
 
 type Pool struct {
 	pb.UnimplementedBroadcastServer
-	nodeID      int32
-	logicalTime int32
-	requestTime int32
-	requesting  bool
-	deferred    map[int32]chan struct{}      // the other nodes that are requesting but are being postponed while this node has priority
+	nodeID      int32                   // between 0-2
+	logicalTime int32                   // the node's current time
+	requestTime int32                   // the time for the request sent by this node
+	requesting  bool                    // wether or not the node is requesting to enter the critical section
+	deferred    map[int32]chan struct{} // the other nodes that are requesting but are being postponed while this node has priority
+	// the channel is to signal to other nodes when their request can continue
 	connections map[int32]pb.BroadcastClient // the other nodes
 	mu          sync.Mutex
 }
 
+// when a node recieves a request
 func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) {
 	p.mu.Lock()
 	if request.Timestamp > p.logicalTime {
@@ -34,7 +36,8 @@ func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) 
 	}
 	p.logicalTime++
 
-	//if this node is also requesting and is earlier than the requesting one
+	//if this node is also requesting
+	//if so, then is it earlier than the requesting one, else if it's the same time who's id is smaller
 	if p.requesting && (p.requestTime < request.Timestamp || (p.requestTime == request.Timestamp && p.nodeID < request.NodeId)) {
 		granted := make(chan struct{})
 		p.deferred[request.NodeId] = granted
@@ -51,6 +54,7 @@ func (p *Pool) Request(ctx context.Context, request *pb.Time) (*pb.Time, error) 
 	return reply, nil
 }
 
+// this node requesting, returns true when all other nodes have responded. only returns false if an error occurs
 func (p *Pool) requestPermission() bool {
 	p.mu.Lock()
 	p.logicalTime++
@@ -61,9 +65,9 @@ func (p *Pool) requestPermission() bool {
 
 	replies := make(chan bool, len(p.connections))
 	for _, connection := range p.connections {
-		go func(connection pb.BroadcastClient) {
+		go func(connection pb.BroadcastClient) { // makes a request for each of the other nodes. It is asyncronous so that we can have a channel waiting for the response of each node
 			reply, err := connection.Request(context.Background(), request, grpc.WaitForReady(true))
-			if err != nil || reply == nil {
+			if err != nil || reply == nil { // in case of error or no reply
 				replies <- false
 				return
 			}
@@ -78,16 +82,16 @@ func (p *Pool) requestPermission() bool {
 		}(connection)
 	}
 
-	granted := true
+	granted := true // whether or not the critical section can be accessed
 	for range len(p.connections) {
-		if !<-replies {
+		if !<-replies { // if any reply fails then granted will be false and the critical section cannot be entered
 			granted = false
 		}
 	}
 	return granted
 }
 
-func (p *Pool) release() {
+func (p *Pool) release() { //resets the node
 	p.mu.Lock()
 	p.requesting = false
 	p.logicalTime++
